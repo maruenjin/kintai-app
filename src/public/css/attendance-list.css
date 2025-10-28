@@ -1,0 +1,391 @@
+
+.u-container {
+    --content-width: 780px;
+    max-width: 980px;
+    margin: 28px auto;
+    padding: 0 20px;
+    
+}
+
+.u-page-title {
+    max-width: var(--content-width);
+    margin: 0 auto 12px;
+    padding-left: 14px;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: .02em;
+    position: relative;
+}
+
+.u-page-title::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 18px;
+    background: #111;
+    border-radius: 2px;
+}
+
+/* ===== Table Card ===== */
+.table-wrap {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, .02);
+    max-width: var(--content-width);
+    margin: 0 auto;
+}
+
+.att-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0
+}
+
+.att-table thead th {
+    background: #f7f7f8;
+    color: #374151;
+    font-weight: 600;
+    text-align: left;
+    font-size: 13px;
+    padding: 12px;
+    border-bottom: 1px solid #e5e7eb
+}
+
+.att-table tbody td {
+    padding: 12px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 14px;
+    vertical-align: middle
+}
+
+.att-table tbody tr:hover {
+    background: #fafafa
+}
+
+/* ===== Columns ===== */
+.col-date {
+    width: 22%;
+    color: #111;
+    font-weight: 600
+}
+
+.col-time,
+.col-rest,
+.col-total {
+    width: 15%
+}
+
+.col-action {
+    width: 12%;
+    text-align: right;
+    padding-right: 16px
+}
+
+/* ===== Links / Buttons ===== */
+.u-link {
+    color: #111;
+    text-decoration: underline
+}
+
+.u-link.-muted {
+    color: #9ca3af;
+    text-decoration: none;
+    cursor: default
+}
+
+.u-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    height: 36px;
+    padding: 0 12px
+}
+
+.u-btn-light:hover {
+    background: #f7f7f7
+}
+
+/* ===== Responsive ===== */
+@media (max-width:720px) {
+    .u-container {
+        padding: 0 14px;
+        --content-width: 100%;
+    }
+
+    .att-table thead {
+        display: none
+    }
+
+    .att-table tbody tr {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        padding: 12px
+    }
+
+    .att-table tbody td {
+        border: 0;
+        padding: 0
+    }
+
+    .col-action {
+        grid-column: 1 / -1;
+        text-align: left;
+        margin-top: 6px;
+        padding-right: 0
+    }
+
+    .table-wrap {
+        border-radius: 10px
+    }
+}
+
+
+.u-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 12px 0 18px
+}
+
+/* --- Pill (group) --- */
+.u-month-picker {
+    position: relative;
+    overflow: visible;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    border: 1px solid #E6E8EB;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(16, 24, 40, .04), 0 1px 1px rgba(16, 24, 40, .06);
+    width: 100%;
+    max-width: var(--content-width);
+    margin: 0 auto;
+}
+
+
+.u-month-picker>*:not(.mp-pop) {
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 16px;
+}
+
+.u-month-picker>*:not(.mp-pop)+*:not(.mp-pop) {
+    border-left: 1px solid #EEF1F4;
+}
+
+
+.mp-btn {
+    font-weight: 600;
+    color: #374151;
+    text-decoration: none;
+    letter-spacing: .02em;
+    transition: background .15s ease, color .15s ease;
+}
+
+.mp-btn svg {
+    opacity: .9
+}
+
+.mp-btn:hover {
+    background: #F6F5FF;
+    color: #374151
+}
+
+
+.mp-ym {
+    background: #fff;
+    border: 0;
+    cursor: pointer;
+    font-weight: 700;
+    color: #111;
+    letter-spacing: .02em;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 16px;
+}
+
+.mp-ym svg {
+    color: #9AA3AE
+}
+
+.mp-ym:hover {
+    background: #F6F5FF
+}
+
+.mp-ym:focus-visible {
+    outline: 2px solid #6B5BE2;
+    outline-offset: 2px;
+    border-radius: 6px
+}
+
+.mp-btn span {
+    white-space: nowrap
+}
+
+
+.mp-pop {
+    position: absolute !important;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 360px;
+    background: #fff;
+    border: 1px solid #E6E8EB;
+    border-radius: 12px;
+    box-shadow: 0 12px 24px rgba(16, 24, 40, .08), 0 2px 4px rgba(16, 24, 40, .06);
+    padding: 12px !important;
+    height: auto !important;
+    z-index: 1000;
+    border-left: 0 !important;
+}
+
+.mp-pop[hidden] {
+    display: none !important;
+}
+
+.mp-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px
+}
+
+.mp-year {
+    font-weight: 700;
+    color: #111
+}
+
+.mp-year-btn {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #E6E8EB;
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer
+}
+
+.mp-year-btn:hover {
+    background: #F6F5FF
+}
+
+.mp-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px
+}
+
+.mp-cell {
+    height: 40px;
+    border: 1px solid #E6E8EB;
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+    font-weight: 600
+}
+
+.mp-cell:hover {
+    background: #F6F5FF;
+    border-color: #DCDFFA
+}
+
+
+@media (max-width:720px) {
+    .u-month-picker {
+        border-radius: 10px
+    }
+
+    .u-month-picker>*:not(.mp-pop) {
+        height: 40px;
+        padding: 0 12px
+    }
+
+    .mp-pop {
+        width: min(92vw, 360px)
+    }
+}
+
+
+body {
+    color: #6B7280;
+    
+}
+
+
+.u-page-title,
+.u-month-picker,
+.mp-btn,
+.mp-ym,
+.col-date,
+.u-link {
+    color: #111 !important;
+    
+}
+
+
+.u-link {
+    color: #111;
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+.u-link:hover {
+    text-decoration: none;
+}
+
+
+.att-table thead th {
+    color: #6B7280;
+    
+}
+
+.att-table tbody td {
+    color: #374151;
+    
+}
+
+
+.att-table tbody td.col-rest,
+.att-table tbody td.col-total,
+.att-table tbody td.col-time {
+    color: #6B7280;
+}
+
+.att-table tbody td.col-date {
+    color: #6B7280 !important;
+   
+    font-weight: 600;
+   
+}
+
+
+.mp-btn {
+    color: #6B7280 !important;
+    
+}
+
+.mp-btn svg {
+    color: #9AA3AE !important;
+    
+    opacity: 1;
+    
+}
+
+
+.mp-btn:hover {
+    color: #374151 !important;
+    background: #F6F5FF;
+}

@@ -1,0 +1,171 @@
+
+.u-title-bar {
+    position: relative;
+    padding-left: 12px;
+}
+
+.u-title-bar::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 1.2em;
+    width: 4px;
+    background: #111;
+    border-radius: 2px;
+}
+
+
+.card {
+    background: #fff;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, .02);
+    padding: 24px;
+}
+
+.card+.card {
+    margin-top: 24px;
+}
+
+
+.table-wrap {
+    background: #fff;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.att-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.att-table th,
+.att-table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #E5E7EB;
+    text-align: left;
+}
+
+.att-table thead th {
+    color: #6B7280;
+    font-weight: 600;
+}
+
+.att-table tbody tr:hover {
+    background: #F9FAFB;
+}
+
+.att-table tr:last-child th,
+.att-table tr:last-child td {
+    border-bottom: none;
+}
+
+
+.form-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.form-table th,
+.form-table td {
+    padding: 12px 8px;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.form-table tr:last-child th,
+.form-table tr:last-child td {
+    border-bottom: none;
+}
+
+.form-table th {
+    width: 28%;
+    color: #111;
+    font-weight: 600;
+    text-align: left;
+}
+
+.form-range {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.form-tilde {
+    color: #6B7280;
+}
+
+.input-text {
+    width: 100%;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 14px;
+    background: #fff;
+}
+
+.input-dt {
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 14px;
+}
+
+
+.btn-area {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.btn-black {
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 28px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-black:hover {
+    opacity: .9;
+}
+
+.u-link {
+    color: #111;
+    text-decoration: underline;
+}
+
+
+.u-errors {
+    margin-top: 12px;
+}
+
+.u-error {
+    background: #FEF2F2;
+    color: #991B1B;
+    border: 1px solid #FECACA;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+
+.mt-24 {
+    margin-top: 24px;
+}
+
+
+@media (max-width: 640px) {
+    .form-table th {
+        width: 40%;
+    }
+
+    .table-wrap {
+        padding: 12px;
+    }
+}

@@ -1,0 +1,520 @@
+/* --- Auth Card --- */
+.auth-wrap {
+    max-width: 560px;
+    margin: 48px auto 64px;
+    padding: 32px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .08);
+}
+
+.auth-wrap h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 20px;
+}
+
+.form-stack .form-label {
+    display: block;
+    font-weight: 600;
+    margin: 14px 0 8px;
+}
+
+.input {
+    width: 100%;
+    height: 44px;
+    padding: 0 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.form-error {
+    color: #d33;
+    font-size: 13px;
+    margin-top: 6px;
+}
+
+.btn-black {
+    display: inline-block;
+    width: auto;
+    height: 44px;
+    border-radius: 8px;
+    background: #111;
+    color: #fff;
+    font-weight: 700;
+    border: none;
+    padding: 0 16px;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.mt-6 {
+    margin-top: 24px;
+}
+
+.center {
+    text-align: center;
+}
+
+/* --- Header (black) --- */
+.site-header.is-black {
+    background: #0f0f0f;
+    color: #fff;
+}
+
+.site-header .inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+.site-header .brand img {
+    height: 24px;
+    display: block;
+}
+
+.bg-gray {
+    background: #f3f4f6;
+}
+
+.page.page-gray {
+    padding: 24px 16px;
+}
+
+/* header */
+.site-header {
+    background: #0b0b0b;
+    color: #fff
+}
+
+.site-header .inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 12px 20px
+}
+
+.site-header .brand img {
+    height: 28px;
+    display: block
+}
+
+.main-nav {
+    display: flex;
+    gap: 16px;
+    margin-left: 12px
+}
+
+.main-nav a {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    color: #fff;
+    opacity: .85;
+    text-decoration: none
+}
+
+.main-nav a:hover {
+    opacity: 1
+}
+
+.main-nav a.active {
+    background: #2b2b2b;
+    opacity: 1
+}
+
+.logout-form {
+    margin-left: auto
+}
+
+.logout-form .btn-ghost {
+    color: #fff;
+    border: 1px solid #444;
+    background: transparent;
+    padding: 8px 14px;
+    border-radius: 8px
+}
+
+.logout-form .btn-ghost:hover {
+    background: #1b1b1b
+}
+
+
+.site-header {
+    background: #0a0a0a;
+    color: #fff;
+}
+
+.site-header .inner {
+    max-width: 1040px;
+    margin: 0 auto;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    padding: 0 16px;
+}
+
+.site-header .brand img {
+    height: 28px;
+    display: block;
+}
+
+.user-nav {
+    display: flex;
+    gap: 28px;
+    margin-left: auto;
+}
+
+.user-nav a {
+    color: #cfcfcf;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.user-nav a.active {
+    color: #fff;
+    position: relative;
+}
+
+.user-nav a.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -18px;
+    height: 3px;
+    background: #fff;
+    border-radius: 2px;
+}
+
+.logout-form {
+    margin-left: 24px;
+}
+
+
+.page {
+    background: #f3f4f6;
+    min-height: calc(100vh - 64px);
+}
+
+.punch-hero {
+    max-width: 960px;
+    margin: 32px auto;
+    padding: 0 16px;
+}
+
+.card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, .08);
+}
+
+.card-hero {
+    padding: 32px 24px 28px;
+    text-align: center;
+}
+
+.chip {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.chip-gray {
+    background: #edf1f5;
+    color: #69707a;
+}
+
+.chip-green {
+    background: #e7f8ef;
+    color: #0a9150;
+}
+
+.subdate {
+    margin-top: 12px;
+    color: #64748b;
+    font-weight: 700;
+}
+
+.bigtime {
+    margin-top: 8px;
+    font-size: 56px;
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: .02em;
+    font-variant-numeric: tabular-nums;
+}
+
+.punch-actions {
+    margin-top: 18px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.btn-lg {
+    padding: 14px 32px;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 16px;
+}
+
+.btn-black {
+    background: #111;
+    color: #fff;
+    border: none;
+}
+
+.btn-black:hover {
+    opacity: .9;
+}
+
+.btn-ghost {
+    background: #fff;
+    color: #111;
+    border: 2px solid #111;
+    border-radius: 999px;
+    padding: 12px 20px;
+    font-weight: 800;
+}
+
+.btn-ghost:hover {
+    background: #111;
+    color: #fff;
+}
+
+
+.h2 {
+    font-size: 20px;
+    font-weight: 800;
+    text-align: center;
+    margin: 24px 0 12px;
+}
+
+.rest-table {
+    max-width: 720px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .05);
+    padding: 8px 0;
+}
+
+.rest-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 12px 20px;
+}
+
+.rest-head {
+    color: #6b7280;
+    font-weight: 700;
+}
+
+.rest-row:not(.rest-head) {
+    border-top: 1px solid #eef2f7;
+}
+
+.muted {
+    color: #9aa2ad;
+    padding: 16px;
+    text-align: center;
+}
+
+/* --- ユーザー画面用（ヘッダー黒帯） --- */
+.site-header {
+    background: #0a0a0a !important;
+    color: #fff !important;
+}
+
+.site-header .inner {
+    height: 64px;
+}
+
+.site-header .user-nav a {
+    color: #cfcfcf !important;
+}
+
+.site-header .user-nav a.active {
+    color: #fff !important;
+}
+
+.site-header .btn-ghost {
+    border-color: #fff !important;
+    color: #fff !important;
+}
+
+.site-header .btn-ghost:hover {
+    background: #fff !important;
+    color: #111 !important;
+}
+
+
+.page-user .card-hero {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 24px 0 !important;
+}
+
+.page-user .rest-table {
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+}
+
+.page-user .rest-row {
+    border-top: none !important;
+    padding: 8px 0 !important;
+}
+
+.page-user .h2 {
+    margin: 20px 0 8px !important;
+}
+
+
+.site-header {
+    background: #0a0a0a !important;
+    color: #fff !important;
+}
+
+.site-header .inner {
+    height: 64px;
+}
+
+.site-header a,
+.site-header .user-nav a {
+    color: #cfcfcf !important;
+    text-decoration: none;
+}
+
+.site-header .user-nav a.active {
+    color: #fff !important;
+}
+
+.site-header .btn-ghost {
+    border-color: #fff !important;
+    color: #fff !important;
+}
+
+.site-header .btn-ghost:hover {
+    background: #fff !important;
+    color: #111 !important;
+}
+
+
+.page-user .card,
+.page-user .panel,
+.page-user .box,
+.page-user .card-hero,
+.page-user .rest-table {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+}
+
+.page-user .rest-row {
+    border-top: none !important;
+    padding: 8px 0 !important;
+}
+
+.page-user .h2 {
+    margin: 20px 0 8px !important;
+}
+
+
+.btn-lg {
+    border-radius: 28px;
+    padding: 14px 28px;
+}
+
+
+.page-user .card,
+.page-user .panel,
+.page-user .box,
+.page-user .rest-table,
+.page-user .rest-row {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: 0 !important;
+}
+
+.container-narrow {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.ta-center {
+    text-align: center;
+}
+
+.chip {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 9999px;
+    background: #eee;
+    color: #444;
+    font-weight: 700;
+}
+
+.text-date {
+    font-size: 18px;
+    color: #555;
+}
+
+.clock-hero {
+    margin: 24px 0 12px;
+    font-size: 84px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.btn-row {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+}
+
+.btn-lg {
+    padding: 14px 28px;
+    border-radius: 28px;
+    font-weight: 700;
+}
+
+.btn-primary {
+    background: #5b5ce2;
+    color: #fff;
+    border: 0;
+}
+
+.btn-black {
+    background: #111;
+    color: #fff;
+    border: 0;
+}
+
+.btn-ghost {
+    background: #fff;
+    color: #111;
+    border: 2px solid #111;
+}
+
+.text-muted {
+    color: #777;
+}

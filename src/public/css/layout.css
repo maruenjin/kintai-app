@@ -1,0 +1,93 @@
+body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN",
+        "Yu Gothic", Meiryo, sans-serif;
+    margin: 0;
+    background: #f6f7f9;
+}
+
+header {
+    background: #111;
+    color: #fff;
+    padding: 12px 16px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+header a {
+    color: #fff;
+    text-decoration: none;
+    opacity: 0.9;
+}
+
+header a:hover {
+    opacity: 1;
+}
+
+.container {
+    max-width: 960px;
+    margin: 32px auto;
+    padding: 0 16px;
+}
+
+.auth-wrap {
+    max-width: 420px;
+    margin: 48px auto;
+    padding: 24px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+.auth-wrap h1 {
+    margin: 0 0 16px;
+}
+
+label {
+    display: block;
+    margin-top: 14px;
+    margin-bottom: 6px;
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d0d4db;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.btn-black {
+    display: inline-block;
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 0;
+    background: #111;
+    color: #fff;
+    cursor: pointer;
+}
+
+.form-error {
+    color: #b00020;
+    font-size: 0.9rem;
+    margin-top: 6px;
+}
+
+.mt-4 {
+    margin-top: 1rem;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.link-like {
+    background: none;
+    border: none;
+    color: #111;
+    text-decoration: underline;
+    cursor: pointer;
+}
