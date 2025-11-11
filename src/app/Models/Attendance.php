@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Carbon\Carbon;
 
 class Attendance extends Model
 {
-    
     public const STATUS_OFF     = 0; 
     public const STATUS_WORKING = 1; 
     public const STATUS_BREAK   = 2; 
@@ -16,7 +16,7 @@ class Attendance extends Model
 
     protected $fillable = [
         'user_id', 'work_date', 'clock_in', 'clock_out',
-        'status', 'note', 'total_minutes', 
+        'status', 'note',       
     ];
 
     protected $casts = [
@@ -26,8 +26,7 @@ class Attendance extends Model
         'status'    => 'integer',
     ];
 
-    
-
+  
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -39,37 +38,92 @@ class Attendance extends Model
     }
 
     
+    private function toCarbonOnWorkDate($value): ?Carbon
+    {
+        if (!$value) return null;
+        if ($value instanceof Carbon) return $value;
+
+        $date = $this->work_date instanceof Carbon
+            ? $this->work_date->format('Y-m-d')
+            : (string) $this->work_date;
+
+        
+        $str = (preg_match('/^\d{2}:\d{2}(:\d{2})?$/', (string)$value))
+            ? ($date . ' ' . $value)
+            : (string)$value;
+
+        return Carbon::parse($str);
+    }
+
+    
     public function breakMinutes(): int
     {
-         if (isset($this->breaks_sum_duration_minutes)) {
-        return (int) $this->breaks_sum_duration_minutes;
-    }
-   
-    return (int) $this->breaks()->sum('duration_minutes');
+        if (isset($this->breaks_sum_duration_minutes)) {
+            return (int) $this->breaks_sum_duration_minutes; 
+        }
+        return (int) $this->breaks()->sum('duration_minutes');
     }
 
-    
     public function workedMinutes(): int
     {
-        if (!$this->clock_in || !$this->clock_out) return 0;
-        $gross = $this->clock_out->diffInMinutes($this->clock_in);
-        return max(0, $gross - $this->breakMinutes());
+        $in  = $this->toCarbonOnWorkDate($this->clock_in);
+        $out = $this->toCarbonOnWorkDate($this->clock_out);
+        if (!$in || !$out) return 0;
+
+        $gross  = max(0, $out->diffInMinutes($in)); 
+        $breaks = $this->breakMinutes();           
+        return max(0, $gross - $breaks);            
     }
 
     
-    public function getBreakHmAttribute(): string { return self::minToLabel($this->breakMinutes()); }
-    
-    public function getTotalHmAttribute(): string { return self::minToLabel($this->workedMinutes()); }
+    public function getWorkedMinutesAttribute(): ?int
+    {
+        $in  = $this->toCarbonOnWorkDate($this->clock_in);
+        $out = $this->toCarbonOnWorkDate($this->clock_out);
+        if (!$in || !$out) return null;
+        $gross  = max(0, $out->diffInMinutes($in));
+        $breaks = $this->breakMinutes();
+        return max(0, $gross - $breaks);
+    }
 
+    public function getBreakMinutesAttribute(): int
+    {
+        return $this->breakMinutes();
+    }
 
-    
+    public function getTotalMinutesAttribute(): ?int
+    {
+       
+        return $this->worked_minutes; 
+    }
+
+   
+    public function getWorkedHmAttribute(): string
+    {
+        $m = $this->workedMinutes();
+        $h = intdiv($m, 60);
+        $r = $m % 60;
+        return sprintf('%02d:%02d', $h, $r);
+    }
+
+    public function getBreakHmAttribute(): string
+    {
+        return self::minToLabel($this->breakMinutes());
+    }
+
+    public function getTotalHmAttribute(): string
+    {
+        
+        $m = $this->total_minutes ?? 0;
+        return self::minToLabel($m);
+    }
+
     public static function minToLabel(int $m): string
     {
         return sprintf('%02d:%02d', intdiv($m, 60), $m % 60);
     }
 
-    
-
+   
     public function statusLabel(): string
     {
         return [
@@ -80,8 +134,6 @@ class Attendance extends Model
         ][$this->status] ?? '勤務外';
     }
 
-   
-
     public function scopeOfUser($q, $uid)
     {
         return $q->where('user_id', $uid);
@@ -90,12 +142,13 @@ class Attendance extends Model
     
     public function finalizeTotals(): void
     {
-        if ($this->clock_in && $this->clock_out) {
-            $gross = $this->clock_out->diffInMinutes($this->clock_in);
-            $break = (int) $this->breaks()->sum('duration_minutes'); 
-            $this->total_minutes = max(0, $gross - $break);
-            $this->save();
-        }
+       
+        return;
+    }
+
+    
+    public function applications(): HasMany
+    {
+        return $this->hasMany(\App\Models\AttendanceApplication::class);
     }
 }
-

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\AttendanceBreak;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -128,7 +130,7 @@ class AttendanceController extends Controller
             
             $br->break_end = now();
            
-            $br->duration_minutes = $br->break_end->diffInMinutes($br->break_start);
+            $br->duration_minutes = max(0, $br->break_end->diffInMinutes($br->break_start));
             $br->save();
 
            

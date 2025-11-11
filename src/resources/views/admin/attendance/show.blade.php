@@ -1,87 +1,189 @@
+
 @extends('layouts.admin')
 @section('title','勤怠詳細')
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/admin-attendance.css') }}?v={{ filemtime(public_path('css/admin-attendance.css')) }}">
+<style>
+  :root{ --card-w:900px; }
+  .admin-detail-page{ background:#f5f6f8; }
+  .detail-shell{ width:var(--card-w) !important; margin:0 auto !important; }
+  .detail-title{ width:var(--card-w) !important; margin:0 auto 12px !important; padding-left:0 !important; position:relative; text-align:left; }
+  .detail-title.u-title-bar::before{
+    content:""; position:absolute; left:-12px; top:50%; transform:translateY(-50%);
+    width:4px; height:24px; background:#111; border-radius:2px;
+  }
+  .detail-card{
+    width:var(--card-w) !important; margin:0 auto !important;
+    background:#fff; border-radius:12px; box-shadow:0 10px 24px rgba(0,0,0,.06); padding:24px 28px;
+  }
+  .outside-btn{ width:var(--card-w) !important; margin:12px auto 0 !important; display:flex; justify-content:flex-end; }
+  /* 行内エラー表示 */
+  .u-error{ color:#b91c1c; font-size:12px; margin-top:6px; }
+  .row-error td{ padding-top:0; padding-bottom:12px; }
+  .input-time[aria-invalid="true"], .input-text[aria-invalid="true"]{
+    border-color:#b91c1c; box-shadow:0 0 0 3px rgba(185,28,28,.12);
+  }
+</style>
+@endpush
+
 @section('content')
-<div class="container">
-<div class="card card-lg">
-  <h2 class="mb-6">勤怠詳細</h2>
+@php
+  use Carbon\Carbon;
+  $rows = collect($attendance->breaks ?? [])->sortBy('break_start')->values();
+  $b0 = $rows->get(0);
+  $b1 = $rows->get(1);
 
-  @if(session('status'))
-    <div class="alert success">{{ session('status') }}</div>
-  @endif
-  @if ($errors->any())
-    <div class="alert error">
-      <ul class="list-disc pl-5">
-        @foreach ($errors->all() as $e)
-          <li>{{ $e }}</li>
-        @endforeach
-      </ul>
-    </div>
-  @endif
+  $dateText = $attendance->work_date
+      ? Carbon::parse($attendance->work_date)->format('Y年n月j日') : '';
 
-  <form method="POST" action="{{ route('admin.attendance.update', $attendance) }}" class="form-grid">
-    @csrf
-    @method('PUT')
+  $clockIn  = $attendance->clock_in
+      ? Carbon::parse($attendance->clock_in)->format('H:i') : '';
+  $clockOut = $attendance->clock_out
+      ? Carbon::parse($attendance->clock_out)->format('H:i') : '';
 
-    <div class="grid-row">
-      <label>名前</label>
-      <div>{{ $attendance->user->name }}</div>
-    </div>
+  $b0s = ($b0 && $b0->break_start)
+      ? Carbon::parse($b0->break_start)->format('H:i') : '';
+  $b0e = ($b0 && $b0->break_end)
+      ? Carbon::parse($b0->break_end)->format('H:i') : '';
 
-    <div class="grid-row">
-      <label>日付</label>
-      <div>{{ $attendance->work_date->format('Y年n月j日') }}</div>
-    </div>
+  $b1s = ($b1 && $b1->break_start)
+      ? Carbon::parse($b1->break_start)->format('H:i') : '';
+  $b1e = ($b1 && $b1->break_end)
+      ? Carbon::parse($b1->break_end)->format('H:i') : '';
+@endphp
 
-    <div class="grid-row">
-      <label>出勤・退勤</label>
-      <div class="time-pair">
-        <input type="time" name="clock_in"  value="{{ old('clock_in', optional($attendance->clock_in)->format('H:i')) }}">
-        <span class="tilde">~</span>
-        <input type="time" name="clock_out" value="{{ old('clock_out', optional($attendance->clock_out)->format('H:i')) }}">
+
+<div class="admin-detail-page">
+  <div class="detail-shell">
+    <h1 class="detail-title u-title-bar">勤怠詳細</h1>
+
+    
+
+    <div class="detail-card">
+      <form id="attendance-form" method="POST" action="{{ route('admin.attendance.update', $attendance) }}">
+        @csrf
+        @method('PUT')
+
+        <table class="detail-table">
+          <tbody>
+            <tr>
+              <th>名前</th>
+              <td>{{ optional($attendance->user)->name }}</td>
+            </tr>
+
+            <tr>
+              <th>日付</th>
+              <td>{{ $dateText }}</td>
+            </tr>
+
+           
+            <tr>
+              <th>出勤・退勤</th>
+              <td class="form-range">
+               <input class="input-time" type="time" name="clock_in_time"
+       value="{{ old('clock_in_time', $clockIn) }}"
+       @error('clock_in_time') aria-invalid="true" aria-describedby="err-clock-in" @enderror>
+
+                <span class="form-tilde">〜</span>
+                <input class="input-time" type="time" name="clock_out_time"
+       value="{{ old('clock_out_time', $clockOut) }}"
+       @error('clock_out_time') aria-invalid="true" aria-describedby="err-clock-out" @enderror>
+              </td>
+            </tr>
+            <tr class="row-error"><td></td>
+              <td>
+                @error('clock_in_time')  <div id="err-clock-in"  class="u-error">{{ $message }}</div> @enderror
+                @error('clock_out_time') <div id="err-clock-out" class="u-error">{{ $message }}</div> @enderror
+              </td>
+            </tr>
+
+            
+            <tr>
+              <th>休憩</th>
+              <td class="form-range">
+               <input class="input-time" type="time" name="breaks[0][start]"
+       value="{{ old('breaks.0.start', $b0s) }}"
+       @error('breaks.0.start') aria-invalid="true" aria-describedby="err-b0s" @enderror>
+ 
+                <span class="form-tilde">〜</span>
+              <input class="input-time" type="time" name="breaks[0][end]"
+       value="{{ old('breaks.0.end', $b0e) }}"
+       @error('breaks.0.end') aria-invalid="true" aria-describedby="err-b0e" @enderror> 
+              </td>
+            </tr>
+            <tr class="row-error">
+  <td></td>
+  <td>
+    @if ($errors->has('breaks.0.start') || $errors->has('breaks.0.end'))
+      <div class="u-error">
+        {{ $errors->first('breaks.0.end') ?: $errors->first('breaks.0.start') }}
       </div>
+    @endif
+  </td>
+</tr>
+
+
+           
+            <tr>
+              <th>休憩2</th>
+              <td class="form-range">
+               <input class="input-time" type="time" name="breaks[1][start]"
+       value="{{ old('breaks.1.start', $b1s) }}"
+       @error('breaks.1.start') aria-invalid="true" aria-describedby="err-b1s" @enderror>
+
+                <span class="form-tilde">〜</span>
+                <input class="input-time" type="time" name="breaks[1][end]"
+       value="{{ old('breaks.1.end', $b1e) }}"
+       @error('breaks.1.end') aria-invalid="true" aria-describedby="err-b1e" @enderror>
+              </td>
+            </tr>
+            <tr class="row-error">
+  <td></td>
+  <td>
+    @if ($errors->has('breaks.1.start') || $errors->has('breaks.1.end'))
+      <div class="u-error">
+        {{ $errors->first('breaks.1.end') ?: $errors->first('breaks.1.start') }}
+      </div>
+    @endif
+  </td>
+</tr>
+
+
+            
+            <tr>
+              <th>備考</th>
+              <td>
+                <input id="note" class="input-text" type="text" name="note"
+                       value="{{ old('note', $attendance->note) }}"
+                       @error('note') aria-invalid="true" aria-describedby="err-note" @enderror>
+              </td>
+            </tr>
+           <tr class="row-error">
+  <td></td>
+  <td>
+    @if ($errors->has('note'))
+      <div class="u-error">{{ $errors->first('note') }}</div>
+    @endif
+  </td>
+</tr>
+
+          </tbody>
+        </table>
+      </form>
     </div>
 
     
-     @php
-      $b1 = $attendance->breaks[0] ?? null;
-      $b2 = $attendance->breaks[1] ?? null;
-
-      $b1s = $b1 && $b1->break_start ? $b1->break_start->format('H:i') : '';
-      $b1e = $b1 && $b1->break_end   ? $b1->break_end->format('H:i')   : '';
-      $b2s = $b2 && $b2->break_start ? $b2->break_start->format('H:i') : '';
-      $b2e = $b2 && $b2->break_end   ? $b2->break_end->format('H:i')   : '';
-    @endphp
-
-    <div class="grid-row">
-      <label>休憩</label>
-      <div class="time-pair">
-       <input type="time" name="b1_start" value="{{ old('b1_start', $b1s) }}">
-       <span class="tilde">~</span>
-       <input type="time" name="b1_end"   value="{{ old('b1_end', $b1e) }}">
-     </div>
+    <div class="outside-btn">
+      <button class="btn-black" type="submit" form="attendance-form">修正</button>
     </div>
-
-    <div class="grid-row">
-     <label>休憩2</label>
-     <div class="time-pair">
-      <input type="time" name="b2_start" value="{{ old('b2_start', $b2s) }}">
-      <span class="tilde">~</span>
-      <input type="time" name="b2_end"   value="{{ old('b2_end', $b2e) }}">
-    </div>
-   </div>
-
-
-    <div class="grid-row">
-      <label>備考</label>
-      <textarea name="note" rows="2">{{ old('note', $attendance->note) }}</textarea>
-
-    </div>
-
-    <div class="form-actions">
-      
-      <button type="submit" class="btn-primary">修正</button>
-    </div>
-  </form>
+  </div>
 </div>
 @endsection
+
+
+
+
+
+
+

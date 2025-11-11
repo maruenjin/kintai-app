@@ -29,7 +29,7 @@
     border-radius: 2px;
 }
 
-/* ===== Table Card ===== */
+
 .table-wrap {
     background: #fff;
     border: 1px solid #e5e7eb;
@@ -67,7 +67,7 @@
     background: #fafafa
 }
 
-/* ===== Columns ===== */
+
 .col-date {
     width: 22%;
     color: #111;
@@ -86,7 +86,7 @@
     padding-right: 16px
 }
 
-/* ===== Links / Buttons ===== */
+
 .u-link {
     color: #111;
     text-decoration: underline
@@ -113,7 +113,7 @@
     background: #f7f7f7
 }
 
-/* ===== Responsive ===== */
+
 @media (max-width:720px) {
     .u-container {
         padding: 0 14px;

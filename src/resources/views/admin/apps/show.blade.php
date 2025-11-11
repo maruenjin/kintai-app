@@ -1,55 +1,92 @@
 @extends('layouts.admin')
-@section('title','申請詳細')
+
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/admin-apps.css') }}?v={{ filemtime(public_path('css/admin-apps.css')) }}">
+@endpush
 
 @section('content')
-<div class="container">
-  <h1>申請詳細 #{{ $app->id }}</h1>
+<div class="admin-page apps-show"> 
 
-  @if ($errors->any())
-    <div class="form-error">
-      <ul>@foreach ($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>
+  <div class="detail-shell">
+    <h1 class="u-title-bar">勤怠詳細</h1>
+
+    @if(session('status')) <p class="u-success">{{ session('status') }}</p> @endif
+    @if($errors->any())    <p class="u-error">{{ $errors->first() }}</p>  @endif
+
+    @php
+      use Carbon\Carbon;
+      $att  = $app->attendance;
+      $user = $app->user;
+
+      
+      $wd  = $app->work_date ? Carbon::parse($app->work_date) : ($att->work_date ?? null);
+      $in  = $app->clock_in  ? Carbon::parse($app->clock_in)  : $att->clock_in;
+      $out = $app->clock_out ? Carbon::parse($app->clock_out) : $att->clock_out;
+      $note = $app->note ?? $att->note;
+      $breaks = $att->breaks ?? collect();
+    @endphp
+
+    <div class="detail-card">
+      <table class="detail-table">
+         <colgroup>
+           <col class="col-label"><col class="col-value">
+         </colgroup>
+        <tr>
+          <th>名前</th>
+          <td>{{ $user->name ?? '—' }}</td>
+        </tr>
+        <tr>
+          <th>日付</th>
+          <td>{{ $wd ? $wd->format('Y年n月j日') : '—' }}</td>
+        </tr>
+        <tr>
+          <th>出勤・退勤</th>
+          <td class="range">
+            <span class="chip">{{ optional($in)->format('H:i')  ?? '—' }}</span>
+            <span class="tilde">〜</span>
+            <span class="chip">{{ optional($out)->format('H:i') ?? '—' }}</span>
+          </td>
+        </tr>
+
+        @forelse($breaks as $i => $b)
+          <tr>
+            <th>休憩{{ $i+1 }}</th>
+            <td class="range">
+              <span class="chip">{{ optional($b->break_start)->format('H:i') ?? '—' }}</span>
+              <span class="tilde">〜</span>
+              <span class="chip">{{ optional($b->break_end)->format('H:i')   ?? '—' }}</span>
+            </td>
+          </tr>
+        @empty
+          <tr>
+            <th>休憩</th>
+            <td><span class="chip chip--text">—</span></td>
+          </tr>
+        @endforelse
+
+        <tr>
+          <th>備考</th>
+          <td>{{ $note ?: '—' }}</td>
+        </tr>
+      </table>
     </div>
-  @endif
-  @if (session('status'))
-    <div class="flash-success">{{ session('status') }}</div>
-  @endif
-
-  <div class="card" style="background:#fff;border:1px solid #eee;border-radius:8px;padding:12px">
-    <p><b>申請者:</b> {{ $app->user->name ?? '-' }}</p>
-    <p><b>対象勤怠:</b> #{{ $app->attendance_id }}（{{ optional($app->attendance)->work_date }}）</p>
-    <p><b>申請内容:</b></p>
-    <ul style="margin:6px 0 12px 18px;">
-      <li>日付: {{ $app->work_date ?? '—' }}</li>
-      <li>出勤: {{ $app->clock_in ? \Carbon\Carbon::parse($app->clock_in)->format('Y-m-d H:i') : '—' }}</li>
-      <li>退勤: {{ $app->clock_out ? \Carbon\Carbon::parse($app->clock_out)->format('Y-m-d H:i') : '—' }}</li>
-      <li>備考: {{ $app->note ?? '—' }}</li>
-    </ul>
-    <p><b>状態:</b>
-      @if($app->status===0) 承認待ち
-      @elseif($app->status===1) 承認（{{ $app->approved_at }} by #{{ $app->approved_by }}）
-      @else 却下（{{ $app->approved_at }} by #{{ $app->approved_by }}）
-      @endif
-    </p>
   </div>
 
+ 
+  <div class="detail-actions">
   @if($app->status === 0)
-  <div style="display:flex;gap:12px;margin-top:12px;">
-    <form method="POST" action="{{ route('admin.apps.approve',$app) }}">
-      @csrf @method('PUT')
-      <input type="text" name="manager_comment" placeholder="管理者コメント（任意）">
-      <button type="submit" class="btn">承認</button>
-    </form>
-
-    <form method="POST" action="{{ route('admin.apps.reject',$app) }}">
-      @csrf @method('PUT')
-      <input type="text" name="manager_comment" placeholder="管理者コメント（任意）">
-      <button type="submit" class="btn">却下</button>
-    </form>
-  </div>
+   <form method="POST" action="{{ url('/admin/applications/'.$app->id.'/approve') }}" class="inline">
+  @csrf
+  <button class="btn-black">承認</button>
+</form>
+  @elseif($app->status === 1)
+    <span class="badge-approved">承認済み</span>
   @endif
+</div>
 
-  <div style="margin-top:12px;">
-    <a href="{{ route('admin.apps.index') }}">← 一覧へ戻る</a>
-  </div>
+
 </div>
 @endsection
+
+
+

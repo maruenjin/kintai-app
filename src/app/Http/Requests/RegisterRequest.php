@@ -27,7 +27,7 @@ class RegisterRequest extends FormRequest
         return [
              'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', Password::min(8)->letters()->numbers(), 'confirmed'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
         
         ];
     }
@@ -35,13 +35,14 @@ class RegisterRequest extends FormRequest
      public function messages(): array
     {
         return [
-            'name.required' => '名前は必須です。',
-            'email.required' => 'メールアドレスは必須です。',
-            'email.email' => '有効なメールアドレスを入力してください。',
-            'email.unique' => 'このメールアドレスは既に使用されています。',
-            'password.required' => 'パスワードは必須です。',
-            'password.min' => 'パスワードは8文字以上で入力してください。',
-            'password.confirmed' => 'パスワード確認が一致しません。',
+           'name.required'     => 'お名前を入力してください',
+           'email.required'    => 'メールアドレスを入力してください',
+           'password.required' => 'パスワードを入力してください',
+           'password.min'      => 'パスワードは8文字以上で入力してください',
+           'password.confirmed' => 'パスワードと一致しません',
+           'email.email'  => '有効なメールアドレスを入力してください。',
+           'email.unique' => 'このメールアドレスは既に使用されています。',
+          
         ];
     }
 }

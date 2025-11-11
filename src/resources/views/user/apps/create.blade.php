@@ -8,15 +8,22 @@
 @section('content')
 <div class="u-container">
   <div class="detail-block" style="max-width:640px; margin:0 auto;">
-    <h1 class="u-page-title u-title-bar">勤怠詳細（修正申請）</h1>
+    <h1 class="u-page-title u-title-bar">勤怠詳細</h1>
 
     <form method="POST" action="{{ route('user.apps.store', $attendance) }}">
       @csrf
 
       <div class="card">
         <table class="form-table">
-          <tr><th>名前</th><td>{{ optional($attendance->user)->name }}</td></tr>
-          <tr><th>日付</th><td>{{ optional($attendance->work_date)->format('Y年n月j日（D）') }}</td></tr>
+          <tr>
+            <th>名前</th>
+            <td>{{ optional($attendance->user)->name }}</td>
+          </tr>
+
+          <tr>
+            <th>日付</th>
+            <td>{{ optional($attendance->work_date)->format('Y年n月j日（D）') }}</td>
+          </tr>
 
           <tr>
             <th>出勤・退勤</th>
@@ -29,33 +36,46 @@
             </td>
           </tr>
 
-          @php $rows = ($attendance->breaks ?? collect())->values(); @endphp
-          @foreach($rows as $i => $b)
-            <tr>
-              <th>休憩{{ $i+1 }}</th>
-              <td class="form-range">
-                <input class="input-dt" type="datetime-local" name="breaks[{{ $i }}][start]"
-                       value="{{ old("breaks.$i.start", optional($b->break_start)->format('Y-m-d\TH:i')) }}">
-                <span class="form-tilde">〜</span>
-                <input class="input-dt" type="datetime-local" name="breaks[{{ $i }}][end]"
-                       value="{{ old("breaks.$i.end", optional($b->break_end)->format('Y-m-d\TH:i')) }}">
-              </td>
-            </tr>
-          @endforeach
+          @php
+            $sorted = ($attendance->breaks ?? collect())->sortBy('break_start')->values();
+            $b0 = optional($sorted->get(0));
+            $b1 = optional($sorted->get(1));
+            $b0_start = $b0->break_start ? $b0->break_start->format('Y-m-d\TH:i') : '';
+            $b0_end   = $b0->break_end   ? $b0->break_end->format('Y-m-d\TH:i')   : '';
+            $b1_start = $b1->break_start ? $b1->break_start->format('Y-m-d\TH:i') : '';
+            $b1_end   = $b1->break_end   ? $b1->break_end->format('Y-m-d\TH:i')   : '';
+          @endphp
 
-          @php $i = $rows->count(); @endphp
+          {{-- 休憩（1本目） --}}
           <tr>
-            <th>休憩{{ $i+1 }}</th>
+            <th>休憩</th>
             <td class="form-range">
-              <input class="input-dt" type="datetime-local" name="breaks[{{ $i }}][start]" value="{{ old("breaks.$i.start") }}">
+              <input class="input-dt" type="datetime-local" name="breaks[0][start]"
+                     value="{{ old('breaks.0.start', $b0_start) }}">
               <span class="form-tilde">〜</span>
-              <input class="input-dt" type="datetime-local" name="breaks[{{ $i }}][end]"   value="{{ old("breaks.$i.end") }}">
+              <input class="input-dt" type="datetime-local" name="breaks[0][end]"
+                     value="{{ old('breaks.0.end', $b0_end) }}">
+            </td>
+          </tr>
+
+          
+          <tr>
+            <th>休憩2</th>
+            <td class="form-range">
+              <input class="input-dt" type="datetime-local" name="breaks[1][start]"
+                     value="{{ old('breaks.1.start', $b1_start) }}">
+              <span class="form-tilde">〜</span>
+              <input class="input-dt" type="datetime-local" name="breaks[1][end]"
+                     value="{{ old('breaks.1.end', $b1_end) }}">
             </td>
           </tr>
 
           <tr>
             <th>備考</th>
-            <td><input class="input-text" type="text" name="note" value="{{ old('note') }}" placeholder="例）電車遅延のため"></td>
+            <td>
+              <input class="input-text" type="text" name="note"
+                     value="{{ old('note') }}" placeholder="例）電車遅延のため">
+            </td>
           </tr>
         </table>
 
@@ -72,12 +92,9 @@
         </div>
       </div>
     </form>
-
-    <div class="mt-24" style="text-align:center;">
-      <a class="u-link" href="{{ route('user.attendance.show', $attendance) }}">← 詳細に戻る</a>
-    </div>
   </div>
 </div>
 @endsection
+
 
 

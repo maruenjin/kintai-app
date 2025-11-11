@@ -66,23 +66,22 @@
       </thead>
       <tbody>
       @foreach($days as $d)
-  @php
-    /** @var \App\Models\Attendance|null $a */
-    $a = $d['attendance'] ?? null;
+ @php
+  /** @var \App\Models\Attendance|null $a */
+  $a = $d['attendance'] ?? null;
 
-    
-    $toHm = function ($minutes) {
-        $min = max(0, (int)$minutes);
-        $h = intdiv($min, 60);
-        $m = $min % 60;
-        return sprintf('%d:%02d', $h, $m);
-    };
+  $toHm = function ($minutes) {
+      $min = max(0, (int)$minutes);
+      return sprintf('%d:%02d', intdiv($min, 60), $min % 60);
+  };
 
-    
-    $workMin  = $a && method_exists($a,'workMinutes')  ? (int)$a->workMinutes()  : 0;
-    $breakMin = $a && method_exists($a,'breakMinutes') ? (int)$a->breakMinutes() : 0;
-    $netMin   = max(0, $workMin - $breakMin); // マイナス防止
-  @endphp
+  
+  $totalMin = $a && method_exists($a,'workedMinutes')  ? (int)$a->workedMinutes()  : 0;
+
+  
+  $breakMin = $a && method_exists($a,'breakMinutes') ? (int)$a->breakMinutes() : 0;
+@endphp
+
   <tr>
     <td class="col-date">{{ \Carbon\Carbon::parse($d['date'])->isoFormat('MM/DD(ddd)') }}</td>
     <td class="col-time">{{ $a ? optional($a->clock_in)->format('H:i')  : '—' }}</td>
@@ -95,7 +94,7 @@
 
     
     <td class="col-total">
-      @if($a) {{ $toHm($netMin) }} @else — @endif
+       @if($a) {{ $toHm($totalMin) }} @else — @endif
     </td>
 
     <td class="col-action">

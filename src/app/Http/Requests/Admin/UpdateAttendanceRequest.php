@@ -7,88 +7,119 @@ use Carbon\Carbon;
 
 class UpdateAttendanceRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'clock_in'  => ['nullable','date_format:H:i'],
-            'clock_out' => ['nullable','date_format:H:i'],
-            'b1_start'  => ['nullable','date_format:H:i'],
-            'b1_end'    => ['nullable','date_format:H:i'],
-            'b2_start'  => ['nullable','date_format:H:i'],
-            'b2_end'    => ['nullable','date_format:H:i'],
-            'note'      => ['required','string'], 
-        ];
-    }
+            'clock_in_time'        => ['nullable','date_format:H:i'],
+            'clock_out_time'       => ['nullable','date_format:H:i','after_or_equal:clock_in_time'],
 
-     public function messages(): array
-    {
-        return [
-            'note.required' => '備考を記入してください', 
-        ];
-    }
-
-    public function withValidator($validator)
-    {
-        $validator->after(function ($v) {
-            /** @var \App\Models\Attendance $attendance */
-            $attendance = $this->route('attendance');
-            $date = $attendance->work_date->toDateString();
-
-            $in  = $this->filled('clock_in')  ? Carbon::parse("$date ".$this->clock_in)   : null;
-            $out = $this->filled('clock_out') ? Carbon::parse("$date ".$this->clock_out)  : null;
+            
+            'breaks.0.start'       => ['nullable','date_format:H:i','after_or_equal:clock_in_time','before_or_equal:clock_out_time'],
+            'breaks.0.end'         => ['nullable','date_format:H:i','after_or_equal:breaks.0.start','before_or_equal:clock_out_time'],
+            'breaks.1.start'       => ['nullable','date_format:H:i','after_or_equal:clock_in_time','before_or_equal:clock_out_time'],
+            'breaks.1.end'         => ['nullable','date_format:H:i','after_or_equal:breaks.1.start','before_or_equal:clock_out_time'],
 
            
-            if ($in && $out && $in->gte($out)) {
-                $v->errors()->add('clock_in', '出勤時間もしくは退勤時間が不適切な値です');
-                $v->errors()->add('clock_out', '出勤時間もしくは退勤時間が不適切な値です');
-            }
-
-            
-            foreach ([1,2] as $i) {
-                $s = $this->input("b{$i}_start");
-                $e = $this->input("b{$i}_end");
-                if (($s && !$e) || (!$s && $e)) {
-                    $v->errors()->add("b{$i}_start", '休憩時間が不適切な値です'); 
-                    $v->errors()->add("b{$i}_end",   '休憩時間が不適切な値です');
-                }
-            }
-
-            
-            foreach ([1,2] as $i) {
-                if (!$this->filled("b{$i}_start") || !$this->filled("b{$i}_end")) continue;
-
-                $bs = Carbon::parse("$date ".$this->input("b{$i}_start"));
-                $be = Carbon::parse("$date ".$this->input("b{$i}_end"));
-
-                
-                if ($be->lte($bs)) {
-                    $v->errors()->add("b{$i}_end", '休憩時間もしくは退勤時間が不適切な値です'); 
-                }
-
-                
-                if ($in && $bs->lt($in)) {
-                    $v->errors()->add("b{$i}_start", '休憩時間が不適切な値です');
-                }
-                if ($out && $be->gt($out)) {
-                    $v->errors()->add("b{$i}_end", '休憩時間もしくは退勤時間が不適切な値です'); 
-                }
-            }
-        });
+           'note' => ['required','string','max:500'], 
+        ];
     }
 
+    public function messages(): array
+    {
+        return [
+            'clock_out_time.after_or_equal' => '出勤時間もしくは退勤時間が不適切な値です',
+
+            'breaks.*.start.after_or_equal'  => '休憩時間が不適切な値です',
+            'breaks.*.start.before_or_equal' => '休憩時間が不適切な値です',
+
+            'breaks.*.end.after_or_equal'    => '休憩時間もしくは退勤時間が不適切な値です',
+            'breaks.*.end.before_or_equal'   => '休憩時間もしくは退勤時間が不適切な値です',
+
+           
+            'note.required'                  => '備考を記入してください',
+        ];
+    }
+
+    
+    protected function prepareForValidation(): void
+    {
+        $data = $this->all();
+
+        $normalize = function ($v) { return $v === '' ? null : $v; };
+
+        $data['clock_in_time']  = $normalize($data['clock_in_time']  ?? null);
+        $data['clock_out_time'] = $normalize($data['clock_out_time'] ?? null);
+
+        if (isset($data['breaks']) && is_array($data['breaks'])) {
+            foreach ($data['breaks'] as $i => $row) {
+                $data['breaks'][$i]['start'] = $normalize($row['start'] ?? null);
+                $data['breaks'][$i]['end']   = $normalize($row['end']   ?? null);
+            }
+        }
+
+        $this->replace($data);
+    }
+
+    
+    public function withValidator($validator): void
+{
+    $validator->after(function ($v) {
+        /** @var \App\Models\Attendance $attendance */
+        $attendance = $this->route('attendance');
+
+       
+        $dateStr = method_exists($attendance->work_date, 'toDateString')
+            ? $attendance->work_date->toDateString()
+            : (string) $attendance->work_date;
+
+        
+        $inStr  = $this->input('clock_in_time');
+        $outStr = $this->input('clock_out_time');
+        $in  = $inStr  ? \Carbon\Carbon::parse("$dateStr $inStr")  : null;
+        $out = $outStr ? \Carbon\Carbon::parse("$dateStr $outStr") : null;
+
+        
+        if ($in && $out && $in->gt($out)) {
+            $v->errors()->add('clock_out_time', '出勤時間もしくは退勤時間が不適切な値です');
+        }
+
+       
+        $breaks = (array) $this->input('breaks', []);
+
+        
+        foreach ([0, 1] as $i) {
+            $sStr = data_get($breaks, "$i.start");
+            $eStr = data_get($breaks, "$i.end");
+
+           
+            if (($sStr && !$eStr) || (!$sStr && $eStr)) {
+                $v->errors()->add("breaks.$i.end", '休憩時間が不適切な値です');
+                continue;
+            }
+            if (!$sStr || !$eStr) continue;
+
+            $bs = \Carbon\Carbon::parse("$dateStr $sStr");
+            $be = \Carbon\Carbon::parse("$dateStr $eStr");
+
+            
+            if ($be->lte($bs)) {
+                $v->errors()->add("breaks.$i.end", '休憩時間もしくは退勤時間が不適切な値です');
+            }
+            
+            if ($in && $bs->lt($in)) {
+                $v->errors()->add("breaks.$i.end", '休憩時間が不適切な値です');
+            }
+            if ($out && $be->gt($out)) {
+                $v->errors()->add("breaks.$i.end", '休憩時間もしくは退勤時間が不適切な値です');
+            }
+        }
+    });
 }
+
+}
+

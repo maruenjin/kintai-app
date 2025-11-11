@@ -1,4 +1,4 @@
-/* レイアウト共通 */
+
 * {
     box-sizing: border-box;
 }
@@ -19,7 +19,7 @@ img {
     max-width: 100%;
 }
 
-/* ヘッダー */
+
 .site-header {
     background: #fff;
     border-bottom: 1px solid #eee;
@@ -76,7 +76,7 @@ img {
     color: #475467;
 }
 
-/* ページ */
+
 .page.page-gray {
     background: #f5f6f8;
     min-height: calc(100vh - 57px);
@@ -88,7 +88,7 @@ img {
     padding: 32px 20px;
 }
 
-/* カード */
+
 .card {
     background: #fff;
     border-radius: 12px;
@@ -100,7 +100,7 @@ img {
     padding: 28px 32px;
 }
 
-/* ボタン */
+
 .btn,
 .btn-ghost {
     appearance: none;
@@ -129,7 +129,7 @@ img {
     background: #f2f4f7;
 }
 
-/* テーブル */
+
 .table {
     width: 100%;
     border-collapse: collapse;
@@ -155,7 +155,7 @@ img {
     border-bottom: 0;
 }
 
-/* フラッシュ */
+
 .flash {
     margin: 12px 0;
     padding: 10px 12px;
@@ -406,3 +406,436 @@ img {
     opacity: .45;
     cursor: not-allowed
 }
+
+
+.header .nav .logout-btn {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+    color: #fff;
+    font-weight: 700;
+    line-height: 1;
+    border-radius: 0;
+    appearance: none;
+    cursor: pointer;
+    text-decoration: none;
+   
+}
+
+
+.header .nav .logout-btn:hover {
+    opacity: .85;
+}
+
+
+.header .nav .logout-btn:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+
+
+
+.verify-page {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9fafb;
+}
+
+.verify-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .05);
+    padding: 60px 80px;
+    text-align: center;
+    max-width: 520px;
+    width: 100%;
+}
+
+.verify-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: #111827;
+}
+
+.verify-text {
+    font-size: 14px;
+    color: #4b5563;
+    line-height: 1.8;
+    margin-bottom: 36px;
+}
+
+.verify-status {
+    font-size: 13px;
+    color: #16a34a;
+    margin-bottom: 24px;
+}
+
+.verify-main-form {
+    margin-bottom: 24px;
+}
+
+.verify-main-button {
+    display: inline-block;
+    min-width: 240px;
+    padding: 12px 32px;
+    border-radius: 6px;
+    border: 1px solid #4b5563;
+    background-color: #e5e7eb;
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+    cursor: pointer;
+    transition: background-color .2s, border-color .2s;
+}
+
+.verify-main-button:hover {
+    background-color: #d1d5db;
+    border-color: #111827;
+}
+
+.verify-resend-form {
+    margin-top: 4px;
+}
+
+.verify-resend-link {
+    background: none;
+    border: none;
+    font-size: 13px;
+    color: #2563eb;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+}
+
+
+
+.verify-page {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9fafb;
+}
+
+.verify-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .05);
+    padding: 60px 80px;
+    text-align: center;
+}
+
+.verify-text {
+    font-size: 14px;
+    color: #4b5563;
+    line-height: 1.8;
+    margin-bottom: 32px;
+}
+
+.verify-status {
+    font-size: 13px;
+    color: #16a34a;
+    margin-bottom: 24px;
+}
+
+.verify-main-form {
+    margin-bottom: 24px;
+}
+
+.verify-main-button {
+    display: inline-block;
+    min-width: 240px;
+    padding: 10px 32px;
+    border-radius: 6px;
+    border: 1px solid #4b5563;
+    background-color: #e5e7eb;
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+    cursor: pointer;
+    transition: background-color .2s, border-color .2s;
+}
+
+.verify-main-button:hover {
+    background-color: #d1d5db;
+    border-color: #111827;
+}
+
+.verify-resend-form {
+    margin-top: 4px;
+}
+
+.verify-resend-link {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 13px;
+    color: #2563eb;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+
+
+.verify {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: #f9fafb;
+}
+
+.verify p {
+    font-size: 14px;
+    color: #4b5563;
+    line-height: 1.8;
+    margin-bottom: 24px;
+}
+
+.verify-status {
+    font-size: 13px;
+    color: #16a34a;
+    margin-bottom: 24px;
+}
+
+
+.verify-main-button {
+    min-width: 240px;
+    padding: 10px 32px;
+    border-radius: 6px;
+    border: 1px solid #4b5563;
+    background-color: #e5e7eb;
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+    cursor: pointer;
+    transition: background-color .2s, border-color .2s;
+    margin-bottom: 16px;
+}
+
+.verify-main-button:hover {
+    background-color: #d1d5db;
+    border-color: #111827;
+}
+
+
+.verify-resend-link {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 13px;
+    color: #2563eb;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+body {
+    background: pink;
+}
+
+
+
+.verify {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: #f9fafb;
+}
+
+.verify p {
+    font-size: 15px;
+    color: #111;
+    line-height: 1.8;
+    margin-bottom: 24px;
+}
+
+.verify-status {
+    font-size: 13px;
+    color: #16a34a;
+    margin-bottom: 24px;
+}
+
+
+.verify-main-button {
+    min-width: 240px;
+    padding: 10px 32px;
+    border-radius: 6px;
+    border: 1px solid #4b5563;
+    background-color: #e5e7eb;
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+    cursor: pointer;
+    transition: background-color .2s, border-color .2s;
+    margin-bottom: 16px;
+}
+
+.verify-main-button:hover {
+    background-color: #d1d5db;
+    border-color: #111827;
+}
+
+
+.verify-resend-link {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 13px;
+    color: #2563eb;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.user-nav a.active {
+    background: none;
+    color: #000;
+    border: none;
+    font-weight: 700;
+    
+}
+
+
+.stamp-buttons button[disabled] {
+    background: #f3f4f6;
+    color: #9ca3af;
+    border: 1px solid #e5e7eb;
+    cursor: default;
+}
+
+
+.stamp-buttons button {
+    width: 180px;
+    height: 48px;
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+
+.stamp-buttons button.active,
+.stamp-buttons button:not([disabled]):hover {
+    background: #111;
+    color: #fff;
+    border: none;
+}
+
+
+.stamp-buttons button[disabled],
+.stamp-buttons .is-disabled {
+    background: #fff;
+    color: #111;
+    border: 1px solid #e5e7eb;
+    cursor: default;
+}
+
+body {
+    background: #f5f6f8;
+}
+
+
+.page.page-gray.page-user {
+    background: #f5f6f8 !important;
+}
+
+
+.btn-row {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+.btn-lg {
+    min-width: 180px;
+    height: 48px;
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+
+.btn-black.btn-lg {
+    background: #111;
+    color: #fff;
+    border: none;
+}
+
+
+.page-user .btn-row .btn-ghost.btn-lg {
+    background: #fff;
+    color: #111;
+    border: 1px solid #111;
+}
+
+
+.page-user .btn-row .btn-ghost.btn-lg:hover {
+    background: #fff !important;
+    color: #111 !important;
+    border-color: #111;
+    opacity: 0.9;
+}
+
+
+.btn-row {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    
+}
+
+
+.btn-lg {
+    min-width: 180px;
+    height: 56px;
+    border-radius: 9999px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+
+.btn-black.btn-lg {
+    background: #111;
+    color: #fff;
+    border: none;
+}
+
+.btn-black.btn-lg:hover {
+    opacity: .9;
+}
+
+
+.page-user .btn-row .btn-ghost.btn-lg {
+    background: #fff;
+    color: #111;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+    
+}
+
+
+.page-user .btn-row .btn-ghost.btn-lg:hover {
+    background: #fff !important;
+    color: #111 !important;
+    border: none;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, .12);
+}
+
+.page-user .btn-lg {
+    border-radius: 16px;
+    min-width: 180px;
+    height: 56px;
+}
+

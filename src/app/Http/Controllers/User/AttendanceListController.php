@@ -58,11 +58,16 @@ class AttendanceListController extends Controller
    
     public function show(Attendance $attendance)
     {
-        $this->authorize('view', $attendance);
-       
-        $attendance->load('breaks');
+         $this->authorize('view', $attendance);
 
-        return view('user.attendance.show', compact('attendance'));
+    $attendance->load('breaks');
+
+    
+    $hasPending = \App\Models\AttendanceApplication::where('attendance_id', $attendance->id)
+                   ->where('status', 0)
+                   ->exists();
+
+    return view('user.attendance.show', compact('attendance','hasPending'));
     }
 }
 

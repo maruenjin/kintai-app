@@ -4,25 +4,33 @@
 
 @section('content')
 <div class="verify">
-  <h1>メール認証</h1>
   <p>
-    登録メールアドレスに確認メールを送信しました。<br>
-    メール内のリンクをクリックして認証を完了してください。
+    登録していただいたメールアドレスに認証メールを送付しました。<br>
+    メール認証を完了してください。
   </p>
 
   @if (session('status') == 'verification-link-sent')
-    <div class="flash-success">確認メールを再送しました。数分お待ちください。</div>
+    <p class="verify-status">
+      認証メールを再送しました。数分お待ちください。
+    </p>
   @endif
 
-  <form method="POST" action="{{ route('verification.send') }}" class="mt-6">
+  <form method="POST" action="{{ route('verification.send') }}">
     @csrf
-    <button type="submit" class="btn btn-black w-full">認証メールを再送する</button>
+    <button type="submit" class="verify-main-button">
+      認証はこちらから
+    </button>
   </form>
 
-  <form method="POST" action="{{ route('logout') }}" class="mt-3">
+  <form method="POST" action="{{ route('verification.send') }}">
     @csrf
-    <button type="submit" class="btn btn-ghost w-full">ログアウト</button>
+    <button type="submit" class="verify-resend-link">
+      認証メールを再送する
+    </button>
   </form>
 </div>
 @endsection
+
+
+
 

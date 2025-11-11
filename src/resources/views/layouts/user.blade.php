@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>@yield('title','COACHTECH')</title>
   <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}">
-  @stack('styles') 
+   <link rel="stylesheet" href="{{ asset('css/user.css') }}?v={{ filemtime(public_path('css/user.css')) }}">
 
+  @stack('styles') 
+ 
 </head>
 <body>
 <header class="site-header">
@@ -32,8 +34,8 @@
     $latest = \App\Models\Attendance::ofUser(auth()->id())->latest('work_date')->first();
   @endphp
   @if($latest)
-    <a href="{{ route('user.apps.create', ['attendance' => $latest->id]) }}"
-       class="{{ request()->routeIs('user.apps.*') ? 'active' : '' }}">
+     <a href="{{ route('user.apps.index.alias') }}"
+     class="{{ request()->routeIs('user.apps.*') ? 'active' : '' }}">
       申請
     </a>
   @else

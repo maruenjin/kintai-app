@@ -1,0 +1,82 @@
+:root {
+    --staff-panel-w: 720px;
+    
+    --line: #e5e7eb;
+}
+
+
+.staff-page {
+    padding: 8px 0 40px;
+}
+
+.staff-title {
+    margin: 0 auto 16px;
+    width: var(--staff-panel-w);
+    font-size: 22px;
+    font-weight: 800;
+    position: relative;
+    padding-left: 12px;
+}
+
+.staff-title.u-title-bar::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 24px;
+    background: #111;
+    border-radius: 2px;
+}
+
+
+.staff-panel {
+    width: var(--staff-panel-w);
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, .06);
+    padding: 0;
+   
+    overflow: hidden;
+    border: 1px solid var(--line);
+}
+
+
+.staff-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.staff-table thead th {
+    background: #f9fafb;
+    color: #374151;
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line);
+}
+
+.staff-table tbody td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line);
+    font-size: 14px;
+}
+
+.staff-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+.staff-table a.link {
+    color: #111;
+    text-decoration: underline;
+}
+
+
+
+
+
+

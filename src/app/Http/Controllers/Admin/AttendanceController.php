@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\Admin\UpdateAttendanceRequest;
 use App\Models\AttendanceBreak;
 use App\Http\Controllers\Controller;
+use App\Models\User; 
 use App\Models\Attendance;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -12,59 +13,94 @@ use Illuminate\Http\Request;
 class AttendanceController extends Controller
 {
     public function index(Request $request)
-    {
-        $date = $request->query('date', Carbon::today()->toDateString()); 
-        
-        $items = \App\Models\Attendance::with(['user','breaks'])
-            ->whereDate('work_date', \Carbon\Carbon::parse($date)->toDateString())
-            ->get()
-            ->sortBy(fn($a) => $a->user->name ?? '');
+{
+   $targetDate = Carbon::parse($request->get('date', now()->toDateString()))->startOfDay();
+        $prevDate   = $targetDate->copy()->subDay();
+        $nextDate   = $targetDate->copy()->addDay();
 
-        return view('admin.attendance.index', compact('items', 'date'));
-    }
+        
+        $rows = Attendance::query()
+            ->with('user')
+            ->withSum('breaks as breaks_sum_duration_minutes', 'duration_minutes')
+            ->whereDate('work_date', $targetDate->toDateString())
+            ->orderBy(
+                User::select('name')->whereColumn('users.id', 'attendances.user_id')
+            )
+            ->get()
+            
+            ->map(function ($a) {
+                $breakMin = (int)($a->breaks_sum_duration_minutes ?? 0);
+                if ($a->clock_in && $a->clock_out) {
+                    $worked = Carbon::parse($a->clock_in)->diffInMinutes(Carbon::parse($a->clock_out)) - $breakMin;
+                    $worked = max($worked, 0);
+                    $a->worked_hhmm = sprintf('%02d:%02d', intdiv($worked, 60), $worked % 60);
+                } else {
+                    $a->worked_hhmm = '';
+                }
+                return $a;
+            });
+
+        return view('admin.attendance.index', compact('rows', 'targetDate', 'prevDate', 'nextDate'));
+}
+
 
     public function show(\App\Models\Attendance $attendance)
     {
-        $attendance->load(['user', 'breaks' => fn($q) => $q->orderBy('break_start')]);
-        return view('admin.attendance.show', compact('attendance'));
+         $attendance->load(['user','breaks']);
+    return view('admin.attendance.show', compact('attendance'));
     }
 
     public function update(UpdateAttendanceRequest $request, \App\Models\Attendance $attendance)
-    {
-    $date = $attendance->work_date->toDateString();
+{
+    $data = $request->validated();
 
-    $in  = $request->filled('clock_in')  ? Carbon::parse("$date ".$request->clock_in)  : null;
-    $out = $request->filled('clock_out') ? Carbon::parse("$date ".$request->clock_out) : null;
-
-    $attendance->update([
-        'clock_in'  => $in,
-        'clock_out' => $out,
-        'note'      => $request->note,
-        'status'    => ($in && $out) ? 3 : ($in ? 1 : 0), 
-    ]);
+    $date = Carbon::parse($attendance->work_date)->toDateString();
 
     
-    $keepIds = [];
-    foreach ([1,2] as $i) {
-        $sKey = "b{$i}_start";
-        $eKey = "b{$i}_end";
-        if ($request->filled($sKey) && $request->filled($eKey)) {
-            $bs = Carbon::parse("$date ".$request->input($sKey));
-            $be = Carbon::parse("$date ".$request->input($eKey));
+    $in  = $data['clock_in_time']  ?? null;
+    $out = $data['clock_out_time'] ?? null;
 
-            $break = AttendanceBreak::updateOrCreate(
-                ['attendance_id' => $attendance->id, 'break_start' => $bs],
-                ['break_end' => $be]
-            );
-            $keepIds[] = $break->id;
+    $attendance->clock_in  = $in  ? Carbon::parse("$date $in:00")  : null;
+    $attendance->clock_out = $out ? Carbon::parse("$date $out:00") : null;
+    $attendance->note      = $data['note'] ?? null;
+    $attendance->save();
+
+    
+    $rows = $attendance->breaks()->orderBy('break_start')->get()->values();
+
+    for ($i = 0; $i < 2; $i++) {
+        $start = data_get($data, "breaks.$i.start");
+        $end   = data_get($data, "breaks.$i.end");
+
+       
+        if (!$start && !$end) {
+            if ($rows->get($i)) $rows->get($i)->delete();
+            continue;
         }
+
+        /** @var AttendanceBreak $rec */
+        $rec = $rows->get($i) ?: new AttendanceBreak(['attendance_id' => $attendance->id]);
+
+        $rec->break_start = $start ? Carbon::parse("$date $start:00") : null;
+        $rec->break_end   = $end   ? Carbon::parse("$date $end:00")   : null;
+        $rec->duration_minutes = ($rec->break_start && $rec->break_end)
+            ? $rec->break_end->diffInMinutes($rec->break_start)
+            : 0;
+
+        $rec->save();
     }
+
     
-    $attendance->breaks()->whereNotIn('id', $keepIds)->delete();
+    if ($rows->count() > 2) {
+        $attendance->breaks()
+            ->orderBy('break_start')
+            ->skip(2)
+            ->take(PHP_INT_MAX)
+            ->delete();
+    }
 
     return redirect()
-        ->route('admin.attendance.show', $attendance)
-        ->with('status', '修正しました。');
-}
+        ->route('admin.attendance.show', $attendance);
 }
 
+}

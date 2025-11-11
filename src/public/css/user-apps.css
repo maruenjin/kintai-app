@@ -1,0 +1,278 @@
+
+.page-user-apps {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+    background: #f9fafb;
+}
+
+.u-title-bar {
+    font-size: 24px;
+    font-weight: 700;
+    border-left: 6px solid #000;
+    padding-left: 12px;
+    margin-bottom: 24px;
+}
+
+
+.apps-tabs {
+    display: flex;
+    gap: 24px;
+    border-bottom: 1px solid #999;
+    margin-bottom: 24px;
+}
+
+.apps-tab {
+    font-size: 16px;
+    color: #333;
+    text-decoration: none;
+    padding-bottom: 4px;
+    border-bottom: 2px solid transparent;
+}
+
+.apps-tab.is-active {
+    border-color: #000;
+    font-weight: bold;
+}
+
+
+.app-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .05);
+    padding: 24px 32px;
+    margin-bottom: 24px;
+}
+
+.app-card table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.app-card th,
+.app-card td {
+    text-align: left;
+    padding: 12px 8px;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+}
+
+.app-card th {
+    color: #666;
+    font-weight: normal;
+    width: 120px;
+}
+
+.app-card td {
+    color: #111;
+}
+
+.app-card .u-link {
+    color: #000;
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+.app-card .u-link:hover {
+    text-decoration: none;
+}
+
+
+.note-disabled {
+    color: #c55;
+    font-size: 12px;
+    margin-top: 12px;
+    text-align: right;
+}
+
+
+.page-user-apps {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+    background: #f9fafb
+}
+
+
+.apps-head {
+    margin: 12px 0 8px
+}
+
+.apps-head--section {
+    margin-top: 28px
+}
+
+.apps-head__tabs {
+    display: flex;
+    gap: 28px;
+    align-items: center
+}
+
+.apps-head__tabs .tab {
+    font-size: 14px;
+    color: #6b7280
+}
+
+.apps-head__tabs .tab.is-active {
+    color: #111;
+    font-weight: 700
+}
+
+.apps-head__divider {
+    height: 1px;
+    background: #9ca3af;
+    margin-top: 6px
+}
+
+
+.app-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, .02);
+    padding: 8px 12px
+}
+
+.apps-table {
+    width: 100%;
+    border-collapse: collapse
+}
+
+.apps-table th,
+.apps-table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    vertical-align: middle
+}
+
+.apps-table th {
+    color: #6b7280;
+    font-weight: 600
+}
+
+.apps-table tr:last-child td {
+    border-bottom: none
+}
+
+.col-action {
+    width: 84px;
+    text-align: right
+}
+
+
+.u-link {
+    color: #111;
+    text-decoration: underline
+}
+
+.u-link:hover {
+    text-decoration: none
+}
+
+.empty {
+    color: #6b7280;
+    text-align: center;
+    padding: 24px 0
+}
+
+.page-user-apps {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+    background: #f9fafb
+}
+
+.apps-head {
+    margin: 12px 0 8px
+}
+
+.apps-head__tabs {
+    display: flex;
+    gap: 28px;
+    align-items: center
+}
+
+.apps-head__tabs .tab {
+    font-size: 14px;
+    color: #6b7280;
+    text-decoration: none;
+    position: relative;
+    padding: 4px 0
+}
+
+.apps-head__tabs .tab:hover {
+    color: #111
+}
+
+.apps-head__tabs .tab.is-active {
+    color: #111;
+    font-weight: 700
+}
+
+.apps-head__tabs .tab.is-active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -8px;
+    height: 2px;
+    background: #111;
+    border-radius: 2px;
+}
+
+.apps-head__divider {
+    height: 1px;
+    background: #9ca3af;
+    margin-top: 6px
+}
+
+.app-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, .02);
+    padding: 8px 12px
+}
+
+.apps-table {
+    width: 100%;
+    border-collapse: collapse
+}
+
+.apps-table th,
+.apps-table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    vertical-align: middle
+}
+
+.apps-table th {
+    color: #6b7280;
+    font-weight: 600
+}
+
+.apps-table tr:last-child td {
+    border-bottom: none
+}
+
+.col-action {
+    width: 84px;
+    text-align: right
+}
+
+.u-link {
+    color: #111;
+    text-decoration: underline
+}
+
+.u-link:hover {
+    text-decoration: none
+}
+
+.empty {
+    color: #6b7280;
+    text-align: center;
+    padding: 24px 0
+}

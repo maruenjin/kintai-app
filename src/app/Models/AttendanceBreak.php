@@ -12,6 +12,7 @@ class AttendanceBreak extends Model
     protected $casts = [
         'break_start' => 'datetime',
         'break_end'   => 'datetime',
+        'duration_minutes' => 'integer',
     ];
 
     public function attendance(): BelongsTo
