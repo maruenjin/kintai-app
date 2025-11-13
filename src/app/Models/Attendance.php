@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -9,6 +10,7 @@ use Carbon\Carbon;
 
 class Attendance extends Model
 {
+     use HasFactory;
     public const STATUS_OFF     = 0; 
     public const STATUS_WORKING = 1; 
     public const STATUS_BREAK   = 2; 

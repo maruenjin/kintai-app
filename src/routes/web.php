@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ApplicationController as AdminApp;
 use App\Http\Controllers\Admin\AdminStaffController;
 use App\Http\Controllers\User\AttendanceController       as UserAttendance;
 use App\Http\Controllers\User\AttendanceListController   as UserAttendanceList;
+
 use App\Http\Controllers\User\ApplicationController      as UserApplication;
 
 /*
@@ -17,7 +18,7 @@ use App\Http\Controllers\User\ApplicationController      as UserApplication;
 */
 Route::get('/', fn () => view('welcome'))->name('welcome');
 
-/** 管理者ログイン画面（未ログインのみ） */
+
 Route::get('/admin/login', fn () => view('auth.admin-login'))
     ->name('admin.login')
     ->middleware('guest');
