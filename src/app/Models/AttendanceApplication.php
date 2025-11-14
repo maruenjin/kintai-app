@@ -7,14 +7,43 @@ use Illuminate\Database\Eloquent\Model;
 
 class AttendanceApplication extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
-        'attendance_id','user_id','type',
-        'work_date','clock_in','clock_out','note',
-        'status','approved_by','approved_at','manager_comment',
+        'attendance_id',
+        'user_id',
+        'type',
+        'work_date',
+        'clock_in',
+        'clock_out',
+        'breaks',          
+        'note',
+        'status',
+        'approved_by',
+        'approved_at',
+        'manager_comment',
     ];
 
-    public function attendance(){ return $this->belongsTo(Attendance::class); }
-    public function user(){ return $this->belongsTo(User::class); }
+    protected $casts = [
+        'work_date' => 'date',
+        'clock_in'  => 'datetime',
+        'clock_out' => 'datetime',
+        'breaks'    => 'array',   
+    ];
 
-    public function isPending(): bool { return (int)$this->status === 0; }
+    public function attendance()
+    {
+        return $this->belongsTo(Attendance::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function isPending(): bool
+    {
+        return (int) $this->status === 0;
+    }
 }
+

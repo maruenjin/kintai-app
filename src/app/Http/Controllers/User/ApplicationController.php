@@ -2,31 +2,36 @@
 
 namespace App\Http\Controllers\User;
 
-
-use App\Http\Requests\AttendanceApplicationRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AttendanceApplicationRequest;
+use App\Models\Attendance;
+use App\Models\AttendanceApplication;
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreApplicationRequest;
-use App\Models\{Attendance, Application};
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 
 class ApplicationController extends Controller
 {
     
-    public function index(Request $request) 
+    public function index(Request $request)
     {
-         $status = $request->query('status', 'pending');
-         $uid    = Auth::id();
+        $status = $request->query('status', 'pending');
+        $userId = Auth::id();
 
-         $base = Application::where('user_id', $uid)->latest('id');
+        
+        $base = AttendanceApplication::where('user_id', $userId)
+            ->latest('id');
 
-         if ($status === 'approved') {
-        $apps = (clone $base)->where('status', 1)->paginate(20)->withQueryString();
-        } else { 
-        $status = 'pending';
-        $apps = (clone $base)->where('status', 0)->paginate(20)->withQueryString();
+        if ($status === 'approved') {
+            $apps = (clone $base)
+                ->where('status', 1)   
+                ->paginate(20)
+                ->withQueryString();
+        } else {
+            $status = 'pending';
+            $apps = (clone $base)
+                ->where('status', 0)   
+                ->paginate(20)
+                ->withQueryString();
         }
 
         return view('user.applications.index', compact('apps', 'status'));
@@ -37,52 +42,53 @@ class ApplicationController extends Controller
     {
         
         $this->authorize('view', $attendance);
+
+        
         $attendance->load('breaks');
 
         return view('user.apps.create', compact('attendance'));
     }
 
-    
+   
     public function store(AttendanceApplicationRequest $request, Attendance $attendance)
     {
-   $this->authorize('update', $attendance);
+       
+        $this->authorize('update', $attendance);
 
-    
-    $data = $request->validated();
+        
+        $data = $request->validated();
 
-    
-    $breaks = [];
+        
+        $breaks = [];
 
-    if (!empty($data['break1_start']) || !empty($data['break1_end'])) {
-        $breaks[] = [
-            'start' => $data['break1_start'] ?: null,
-            'end'   => $data['break1_end']   ?: null,
-        ];
+        foreach ([1, 2] as $i) {
+            $start = $data["break{$i}_start"] ?? null;
+            $end   = $data["break{$i}_end"]   ?? null;
+
+            if ($start || $end) {
+                $breaks[] = [
+                    'start' => $start,
+                    'end'   => $end,
+                ];
+            }
+        }
+
+       
+        AttendanceApplication::create([
+            'attendance_id' => $attendance->id,
+            'user_id'       => $request->user()->id,
+            'type'          => 1, 
+            'work_date'     => $attendance->work_date,
+            'clock_in'      => $data['clock_in']  ?? null,
+            'clock_out'     => $data['clock_out'] ?? null,
+            'breaks'        => $breaks,
+            'note'          => $data['reason'],
+            'status'        => 0, 
+        ]);
+
+        return redirect()
+            ->route('user.apps.index')
+            ->with('status', '修正申請を送信しました。');
     }
-
-    if (!empty($data['break2_start']) || !empty($data['break2_end'])) {
-        $breaks[] = [
-            'start' => $data['break2_start'] ?: null,
-            'end'   => $data['break2_end']   ?: null,
-        ];
-    }
-
-    Application::create([
-        'attendance_id' => $attendance->id,
-        'user_id'       => $request->user()->id,
-        'type'          => 1, 
-        'work_date'     => $attendance->work_date,
-        'clock_in'      => $data['clock_in'],     
-        'clock_out'     => $data['clock_out'],     
-        'breaks'        => $breaks,               
-        'note'          => $data['reason'],        
-        'status'        => 0, 
-    ]);
-
-    return redirect()
-        ->route('user.apps.index')
-        ->with('status', '修正申請を送信しました。');
-}
-
 }
 
