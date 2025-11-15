@@ -17,6 +17,7 @@
    ```bash
    git clone https://github.com/maruenjin/kintai-app.git
    cd kintai-app
+
 2. Dockerコンテナ構築・起動
 
 docker compose up -d --build
@@ -61,24 +62,22 @@ MAIL_FROM_NAME="Kintai App"
 🔑 テストユーザー / 管理者ログイン情報
 
 Seeder（AttendanceDemoSeeder）で以下のユーザーが自動作成されます。
-全ユーザー共通パスワード：password
 
-一般ユーザー
-●山田太郎
-　●Email: yamada@example.com
-●佐藤花子
-　●Email: sato@example.com
-●鈴木次郎
-　●Email: suzuki@example.com
-●田中三郎
-　●Email: tanaka@example.com
+### 一般ユーザー（共通パスワード：password）
+
+| 氏名       | メールアドレス        |
+|------------|------------------------|
+| 佐藤花子   | sato@example.com       |
+| 鈴木次郎   | suzuki@example.com     |
+| 田中三郎   | tanaka@example.com     |
+
 
 管理者ユーザー
 ●管理者：山田太郎
 　●Email: yamada@example.com
 　●Password: password
 
-管理者ログイン画面URL：/admin/login
+管理者ログイン画面URL：http://localhost/admin/login
 
 
 📂 ディレクトリ構成（抜粋）
